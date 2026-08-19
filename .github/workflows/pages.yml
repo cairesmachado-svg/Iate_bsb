@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,6 +23,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Renomear para Proposta de Gestão
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = [
+              ('Iate de Todos — Ouvir, Cuidar e Transformar com o sócio no centro da gestão.', 'Proposta de Gestão — Ouvir, Cuidar e Transformar com o sócio no centro da gestão.'),
+              ('<title>Iate de Todos | Ouvir, Cuidar e Transformar</title>', '<title>Proposta de Gestão | Ouvir, Cuidar e Transformar</title>'),
+              ('<span>IATE DE TODOS</span>', '<span>PROPOSTA DE GESTÃO</span>'),
+              ('<h1>IATE <span>DE TODOS</span></h1>', '<h1>PROPOSTA <span>DE GESTÃO</span></h1>'),
+              ('Iate de Todos: ouvir, cuidar e transformar com o sócio no centro.', 'Proposta de Gestão: ouvir, cuidar e transformar com o sócio no centro.'),
+              ('subject=Quero participar do Iate de Todos', 'subject=Quero participar da Proposta de Gestão'),
+              ('Iate de Todos — material preliminar de campanha.', 'Proposta de Gestão — material preliminar de campanha.'),
+              ('# Iate de Todos', '# Proposta de Gestão'),
+          ]
+
+          for filename in ('index.html', 'README.md'):
+              path = Path(filename)
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding='utf-8')
+              for old, new in replacements:
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Registrar renomeação no repositório
+        shell: bash
+        run: |
+          if ! git diff --quiet -- index.html README.md; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html README.md
+            git commit -m "Renomear site para Proposta de Gestão"
+            git push
+          fi
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
