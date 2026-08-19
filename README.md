@@ -1,4 +1,4 @@
-# Iate de Todos
+# Proposta de Gestão
 
 Site estático responsivo da plataforma **Iate de Todos — Ouvir, Cuidar e Transformar**.
 
