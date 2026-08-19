@@ -27,6 +27,19 @@ jobs:
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Ajustar contato do WhatsApp
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+          old = 'href="mailto:contato@iatedetodos.com.br?subject=Quero participar da Proposta de Gestão">Quero participar</a>'
+          new = 'href="https://wa.me/5561999672157?text=Ol%C3%A1%2C%20Bressan%21%20Quero%20participar%20da%20Proposta%20de%20Gest%C3%A3o%20do%20Iate.%20Gostaria%20de%20saber%20como%20posso%20contribuir." target="_blank" rel="noopener noreferrer" aria-label="Falar com Bressan, vice-comodoro, pelo WhatsApp">Quero participar</a>'
+          if old not in s:
+              raise SystemExit("CTA 'Quero participar' não encontrado")
+          p.write_text(s.replace(old, new, 1), encoding="utf-8")
+          PY
+
       - name: Preparar site
         uses: actions/upload-pages-artifact@v4
         with:
