@@ -34,9 +34,9 @@ jobs:
           p = Path("index.html")
           s = p.read_text(encoding="utf-8")
           old = 'href="mailto:contato@iatedetodos.com.br?subject=Quero participar da Proposta de Gestão">Quero participar</a>'
-          new = 'href="https://wa.me/5561999672157?text=Ol%C3%A1%2C%20Bressan%21%20Quero%20participar%20da%20Proposta%20de%20Gest%C3%A3o%20do%20Iate.%20Gostaria%20de%20saber%20como%20posso%20contribuir." target="_blank" rel="noopener noreferrer" aria-label="Falar com Bressan, vice-comodoro, pelo WhatsApp">Quero participar</a>'
+          new = 'href="https://wa.me/5561999672157?text=Ol%C3%A1%2C%20Bressan%21%20Estamos%20juntos%21%20Concordo%20com%20as%20propostas%20apresentadas%20e%20estou%20%C3%A0%20disposi%C3%A7%C3%A3o%20para%20assinar%20a%20lista%20da%20nova%20chapa.%20Conte%20comigo%21" target="_blank" rel="noopener noreferrer" aria-label="Confirmar apoio às propostas com Bressan, vice-comodoro, pelo WhatsApp">Estamos juntos!</a>'
           if old not in s:
-              raise SystemExit("CTA 'Quero participar' não encontrado")
+              raise SystemExit("CTA original não encontrado")
           p.write_text(s.replace(old, new, 1), encoding="utf-8")
           PY
 
